@@ -14,6 +14,7 @@ pipeline{
                 sh 'echo *************************'
                 sh 'node --version'
                 sh 'npm -v'
+                sh 'mongod --version'
                                
             }
         }
