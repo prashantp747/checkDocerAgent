@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  jenkins:
+    container_name: 'markus1'
+    privileged: true
+    image: 'jenkins/jenkins'
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - $PWD/jenkins_home:/var/jenkins_home  
+    networks: 
+      - jensnetwork
+networks: 
+  jensnetwork:

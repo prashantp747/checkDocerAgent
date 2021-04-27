@@ -1,23 +1,71 @@
-pipeline{
+pipeline {
 
-    agent {
-    docker {
-    args '-p 8989:8989'
-    image 'mongo-express:0.54.0'
-        }
+    /* agent any */
+
+     agent {
+        docker { 
+            image 'node:12.22.1'
+            args '-p 8989:8989' 
+
+             }
+    } 
+    environment {
+        HOME = '.'
     }
 
-    stages{
+    /*tools { 
+    
+        nodejs 'demoAngular'
+       } */
+
+    stages {
         stage("build") {
             steps {
 
-                sh 'echo *************************'
+                echo "This is build stage.."
+                sh "pwd"
+                dir("${env.WORKSPACE}/app"){
+                    sh "pwd"
+                }
+                echo "Directory after changed"
+                sh "pwd"
+
+                /* #sh "ng -v" */
+                sh 'npm install'
+                echo '*************************'
                 sh 'node --version'
                 sh 'npm -v'
-                sh 'mongod --version'
-                               
+                sh 'npm run-script lint'
+                echo '----------------------- xxxxxxxxxxxxx -----------------------'
+
+                
             }
         }
 
+         stage("test") {
+            
+            agent{
+                label 'master'
+            }
+            steps {
+
+                echo 'This is test stage..'
+                /* sh 'npm run-script test' */
+                echo 'This test stage needs to be configured'
+                sh 'npm run-script test'
+                echo 'Done with Test Stage'
+                echo '----------------------- xxxxxxxxxxxxx -----------------------'
+
+
+            }
+        }
+        
+         stage("deploy") {
+            steps {
+
+                echo 'This is deploy stage..'
+                
+            }
+        }
     }
 }
